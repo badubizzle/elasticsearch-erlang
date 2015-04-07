@@ -20,7 +20,8 @@
     search/5,
     count/3,
     count/4,
-    count/5
+    count/5,
+    get/3
 ]).
 
 start() ->
@@ -117,3 +118,11 @@ count(Index, Type, Query, Params) ->
 
 count(Worker, Index, Type, Query, Params) ->
     elasticsearch_worker:request(Worker, post, [Index, Type, <<"_count">>], Query, Params).
+
+get(Index, Type, DocId)->
+  poolboy:transaction(elasticsearch, fun (Worker) ->
+    get(Worker,Index, Type, DocId)
+  end).
+
+get(Worker, Index, Type, DocId)->
+  elasticsearch_worker:request(Worker, get, [Index, Type, DocId], <<>>, []).

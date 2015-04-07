@@ -44,7 +44,7 @@ init([Host, Port, HttpOptions]) ->
 
 handle_call({Method, Path, Body0, Params0}, _From, #state{ base_url = BaseUrl, http_options = HttpOptions } = State) ->
     URLPath = BaseUrl ++ string:join([escape(to_list(P)) || P <- Path], "/"),
-    Body = case Body0 of 
+    Body = case Body0 of
         <<>> -> <<>>;
         B    -> jsx:encode(B)
     end,
@@ -56,10 +56,12 @@ handle_call({Method, Path, Body0, Params0}, _From, #state{ base_url = BaseUrl, h
     Request = case Method of
         delete ->
             {URL, Headers};
+        get ->
+            {URL, Headers};
         _      ->
             {URL, Headers, "application/json", to_list(Body)}
     end,
-    Reply = case httpc:request(Method, Request, 
+    Reply = case httpc:request(Method, Request,
         HttpOptions, ?HTTPC_OPTIONS, ?PROFILE) of
         {ok, {Status, RespBody}} when Status == 200; Status == 201 ->
             {ok, search_result(RespBody)};
@@ -90,7 +92,7 @@ code_change(_OldVsn, State, _Extra) ->
 search_result(Body) ->
     Result = jsx:decode(Body),
     Result.
-    
+
 to_list(List) when is_list(List) -> List;
 to_list(Binary) when is_binary(Binary) -> binary_to_list(Binary);
 to_list(Integer) when is_integer(Integer) -> integer_to_list(Integer);
