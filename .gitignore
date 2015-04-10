@@ -10,3 +10,4 @@ deps
 *.dump
 .DS_Store
 .tm_properties
+elasticsearch.iml

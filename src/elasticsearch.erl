@@ -21,7 +21,7 @@
     count/3,
     count/4,
     count/5,
-    get/3
+    get/3,
 ]).
 
 start() ->
@@ -54,6 +54,7 @@ index(Index, Type, Id, Doc) when is_binary(Id) ->
     index(Index, Type, Id, Doc, []);
 index(Index, Type, Doc, Params) ->
     index(Index, Type, undefined, Doc, Params).
+
 
 index(Worker, Index, Type, Id, Doc) when is_pid(Worker) ->
     index(Worker, Index, Type, Id, Doc, []);
