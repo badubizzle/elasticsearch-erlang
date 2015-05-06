@@ -21,7 +21,7 @@
     count/3,
     count/4,
     count/5,
-    get/3,
+    get/3
 ]).
 
 start() ->
